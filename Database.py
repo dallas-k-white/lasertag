@@ -40,7 +40,7 @@ def delete_player(name: str):
         cursor = conn.cursor()
 
         cursor.execute("""
-        DELETE FROM players WHERE codename='%s';
+        DELETE FROM players WHERE codename=%s;
         """
         (name))
 
@@ -68,7 +68,7 @@ def get_players():
         
         cursor.close()
         conn.close()
-        
+
     except Exception as error:
         print("Error:", error)
 
