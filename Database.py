@@ -8,7 +8,6 @@ def connect_db():
             password = "student",
             port = "5432"
         )
-        print ("Database Connection Established")
         return conn
     except Exception as error:
         print("Error connecting to Database:", error)
@@ -20,7 +19,6 @@ def add_player(name: str):
         cursor = conn.cursor()
 
         playerID = get_id_increment()
-
         cursor.execute("""
         INSERT INTO players (id, codename) values (%s, %s);
         """,
@@ -32,6 +30,45 @@ def add_player(name: str):
         conn.close()
         cursor.close()
 
+    except Exception as error:
+        print("Error:", error)
+
+
+def delete_player(name: str):
+    conn = connect_db()
+    try:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        DELETE FROM players WHERE codename='%s';
+        """
+        (name))
+
+        print("Player " + name + " has been deleted")
+
+        conn.commit()
+        conn.close()
+        cursor.close()
+
+    except Exception as error:
+        print("Error:", error)
+
+
+def get_players():
+    conn = connect_db()
+    try:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        SELECT * FROM players;
+        """)
+        players = cursor.fetchall()
+        for p in players:
+            print("ID: " + str(p[0]), ", Name: " + str(p[1]))
+        
+        cursor.close()
+        conn.close()
+        
     except Exception as error:
         print("Error:", error)
 
@@ -50,12 +87,19 @@ def get_id_increment() -> int:
         conn.close()
 
         lastID = entry[0]
-        print(lastID)
         lastID += 1
         return lastID
 
     except Exception as error:
         print("Error:", error)
 
+
 add_player("Bob")
 add_player("Joe")
+get_players()
+delete_player("Bob")
+delete_player("Joe")
+get_players()
+add_player("Phil")
+add_player("Jeff")
+get_players
