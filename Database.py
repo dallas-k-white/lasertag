@@ -40,9 +40,9 @@ def delete_player(name: str):
         cursor = conn.cursor()
 
         cursor.execute("""
-        DELETE FROM players WHERE codename=%s;
-        """
-        (name,))
+        DELETE FROM players WHERE codename= %s;
+        """,
+        (name))
 
         print("Player " + name + " has been deleted")
 
