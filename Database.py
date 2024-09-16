@@ -24,7 +24,7 @@ def add_player(name: str):
         """,
         (playerID, name))
 
-        print("Player " + name + "successfully added")
+        print("Player " + name + " successfully added")
 
         conn.commit()
         conn.close()
@@ -102,4 +102,4 @@ delete_player("Joe")
 get_players()
 add_player("Phil")
 add_player("Jeff")
-get_players
+get_players()
