@@ -65,7 +65,7 @@ def delete_player(name: str):
         cursor.execute("""
         DELETE FROM players WHERE codename= %s;
         """,
-        (name))
+        (name,))
 
         print("Player " + name + " has been deleted")
 
