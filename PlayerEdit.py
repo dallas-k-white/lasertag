@@ -9,10 +9,10 @@ main_frame = tk.Frame(root)
 main_frame.pack(pady=20)
 
 # Tema labels
-team1_label = tk.Label(main_frame, text="Red 1", font=("Arial", 14))
+team1_label = tk.Label(main_frame, text="Red Team", font=("Arial", 14), background='red')
 team1_label.grid(row=0, column=0, padx=10)
 
-team2_label = tk.Label(main_frame, text="Green 2", font=("Arial", 14))
+team2_label = tk.Label(main_frame, text="Green Team", font=("Arial", 14), background='green')
 team2_label.grid(row=0, column=2, padx=10)
 
 
@@ -31,7 +31,7 @@ for i in range(20):
     
     # Team2
     team2_entry = ttk.Entry(main_frame, width=20)
-    team2_entry.grid(row=i+1, column=2, padx=10, pady=5)
+    team2_entry.grid(row=i+1, column=2, padx=10, pady=5,)
     team2_entries.append(team2_entry)
 
 
