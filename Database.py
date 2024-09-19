@@ -130,7 +130,7 @@ else:
     print("Player already exists with that ID, Name: ", name)
 name2 = find_player(20)
 if name2 is None:
-    print("id Not found adding player: ", name)
+    print("id Not found adding player: ", name2)
     add_player("Harold", 20)
 else: 
     print("Player already exists with that ID, Name: ", name2)
