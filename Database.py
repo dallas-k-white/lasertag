@@ -17,22 +17,22 @@ def find_player(id: int) -> str:
     conn = connect_db()
     try:    
         cursor = conn.cursor()
-
+        player_id = str(id)
         cursor.execute("""
-        SELECT * FROM players WHERE id = %s;
+        SELECT codename FROM players WHERE id = %s;
         """,
-        (id))
+        (player_id,))
         player = cursor.fetchall()
-        if player.len() == 0:
+        if len(player) == 0:
             conn.close()
             cursor.close()
             return None
-        print(str(player[1]))
+        print(player[0][0])
         conn.close()
         cursor.close()
-        return str(player[1])
+        return str(player[0][0])
     except Exception as error:
-        print("Error connecting to Database:", error)
+        print("Error connecting to Database from find:", error)
 
 
 def add_player(name: str, id: int):
@@ -130,13 +130,21 @@ def get_id_increment() -> int:
     except Exception as error:
         print("Error:", error)
 
-clear_table()
-add_player("Bob", 1)
-add_player("Joe", 20)
-get_players()
-delete_player("Bob")
-delete_player("Joe")
-get_players()
-add_player("Phil", 99)
-add_player("Jeff", 5)
-get_players()
+#clear_table()
+#add_player("Bob", 1)
+#add_player("Joe", 20)
+#get_players()
+#delete_player("Bob")
+#delete_player("Joe")
+#get_players()
+#add_player("Phil", 99)
+#add_player("Jeff", 5)
+#get_players()
+delete_player("Heidi")
+name = find_player(99)
+if name is None:
+    print("id Not found")
+    add_player("Heidi", 20)
+else:
+    print("Name: ", name)
+
