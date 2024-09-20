@@ -13,12 +13,35 @@ def connect_db():
         print("Error connecting to Database:", error)
 
 
-def add_player(name: str):
+def find_player(id: int) -> str:
+    conn = connect_db()
+    try:    
+        cursor = conn.cursor()
+        player_id = str(id)
+        cursor.execute("""
+        SELECT codename FROM players WHERE id = %s;
+        """,
+        (player_id,))
+        player = cursor.fetchall()
+        if not player:
+            conn.close()
+            cursor.close()
+            return None
+        print(player[0][0])
+        conn.close()
+        cursor.close()
+        return str(player[0][0])
+    except Exception as error:
+        print("Error connecting to Database from find:", error)
+
+
+def add_player(name: str, id: int):
     conn = connect_db()
     try:
         cursor = conn.cursor()
 
-        playerID = get_id_increment()
+        #playerID = get_id_increment()
+        playerID = id
         cursor.execute("""
         INSERT INTO players (id, codename) values (%s, %s);
         """,
@@ -73,33 +96,42 @@ def get_players():
         print("Error:", error)
 
 
-def get_id_increment() -> int:
+def clear_table():
     conn = connect_db()
     try:
         cursor = conn.cursor()
 
         cursor.execute("""
-        SELECT id FROM players ORDER BY id DESC LIMIT 1;
+        DELETE FROM players;
         """)
-        entry = cursor.fetchone()
-
-        cursor.close()
+        conn.commit()
         conn.close()
-
-        lastID = entry[0]
-        lastID += 1
-        return lastID
-
+        cursor.close()
     except Exception as error:
-        print("Error:", error)
+        print("Error connecting to Database:", error)
 
+# clear_table()
+# add_player("Bob", 1)
+# add_player("Joe", 20)
+# get_players()
+# delete_player("Bob")
+# delete_player("Joe")
+# get_players()
+# add_player("Phil", 99)
+# add_player("Jeff", 5)
+# get_players()
 
-add_player("Bob")
-add_player("Joe")
-get_players()
-delete_player("Bob")
-delete_player("Joe")
-get_players()
-add_player("Phil")
-add_player("Jeff")
-get_players()
+# delete_player("Heidi")
+# name = find_player(99)
+# if name is None:
+#     print("id Not found adding player: ", name)
+#     add_player("Heidi", 99)
+# else:
+#     print("Player already exists with that ID, Name: ", name)
+# name2 = find_player(20)
+# if name2 is None:
+#     print("id Not found adding player: Harold")
+#     add_player("Harold", 20)
+# else: 
+#     print("Player already exists with that ID, Name: ", nado me2)
+
