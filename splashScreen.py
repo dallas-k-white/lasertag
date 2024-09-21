@@ -2,9 +2,12 @@ import tkinter as tk
 from PIL import ImageTk, Image
 from tkinter import ttk
 
+root = tk.Tk()
 
 def hide_image(label):
     label.destroy()
+    root.destroy()
+
 
 def splash_screen():
 
@@ -15,8 +18,6 @@ def splash_screen():
         logo = ImageTk.PhotoImage(image)
         label.config(image=logo)
         label.image = logo
-
-    root = tk.Tk()
     root.title("Splash Screen")
     root.geometry("600x600")
 
@@ -30,4 +31,6 @@ def splash_screen():
 
     root.after(5000, hide_image, label)
     root.mainloop()
-splash_screen()
+    
+if __name__ == "__main__":
+	splash_screen()
