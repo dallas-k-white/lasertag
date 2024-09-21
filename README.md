@@ -1,3 +1,15 @@
+
+# Installation Instructions
+
+1. Clone this repository
+2. install dependancies:  `sudo apt install python3-tk python3-psycopg2 python3-pil.imagetk`
+3. to run program run the main.py file with python 3: `python3 main.py` 
+
+
+
+
+# Students
+
 | Student Name | Github Name|
 | ------------ | ---------- |
 | Zachary Bergin | zacharybergin |
