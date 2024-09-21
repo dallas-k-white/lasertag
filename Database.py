@@ -4,8 +4,8 @@ def connect_db():
     try:
         conn = psycopg2.connect(
             dbname = "photon",
-            user = "student",
-            password = "student",
+            user = "chasehandford",
+            password = "Trollface474",
             port = "5432"
         )
         return conn
