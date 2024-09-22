@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from Database import find_player, add_player
- 
+import udp_handler 
+
 def build(root: tk.Tk) -> None:
+    udp_handler_instance = udp_handler.get_instance()
     root.title("Edit Player Screen")
     root.geometry("850x700")
 
@@ -67,6 +69,7 @@ def build(root: tk.Tk) -> None:
             team1_id_value = team1_ids[i].get()
             if team1_id_value:  # Ensure there is an ID to check
                 try:
+                    udp_handler_instance.transmit_equipment_id(int(team1_id_value))
                     player1_codename = find_player(int(team1_id_value))
                     if player1_codename:  # If a player is found
                         team1_entries[i].delete(0, tk.END)  # Clear current entry
@@ -82,6 +85,7 @@ def build(root: tk.Tk) -> None:
             team2_id_value = team2_ids[i].get()
             if team2_id_value:  # Ensure there is an ID to check
                 try:
+                    udp_handler_instance.transmit_equipment_id(int(team2_id_value))
                     player2_codename = find_player(int(team2_id_value))
                     if player2_codename:
                         team2_entries[i].delete(0, tk.END)

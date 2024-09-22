@@ -7,6 +7,7 @@ UDP_IP = "127.0.0.1"
 OUTBOUND_PORT = 7500
 INBOUND_PORT = 7501
 SEND_DESTINATION = (UDP_IP, OUTBOUND_PORT)
+
 def socket_thread(in_socket, out_socket, out_lock, recieve_queue, stop_func):
     in_socket.setblocking(False);
     in_socket.bind(("0.0.0.0",INBOUND_PORT))
@@ -74,3 +75,9 @@ if __name__ == "__main__":
         time.sleep(3);
     handler.transmit_end()
     handler.shutdown()
+
+
+handler_instance = udpHandler()
+
+def get_instance():
+    return handler_instance
