@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from Database import find_player, add_player
 import udp_handler 
+import tkinter.simpledialog as simpledialog
 
 def build(root: tk.Tk) -> None:
     udp_handler_instance = udp_handler.get_instance()
@@ -69,15 +70,21 @@ def build(root: tk.Tk) -> None:
             team1_id_value = team1_ids[i].get()
             if team1_id_value:  # Ensure there is an ID to check
                 try:
-                    udp_handler_instance.transmit_equipment_id(int(team1_id_value))
+                    
                     player1_codename = find_player(int(team1_id_value))
                     if player1_codename:  # If a player is found
                         team1_entries[i].delete(0, tk.END)  # Clear current entry
                         team1_entries[i].insert(0, player1_codename)  # Insert the found codename
+
+                        equipment_id = simpledialog.askinteger("Equipment ID", f"Enter equipment ID for {team1_entries[i].get()}:", minvalue=1)
+                        udp_handler_instance.transmit_equipment_id(equipment_id)
                     else:
                         # If no player found, add the new player using the current entry
                         if team1_entries[i].get():  # Ensure there's something to add
                             add_player(team1_entries[i].get(), int(team1_id_value))
+
+                            equipment_id = simpledialog.askinteger("Equipment ID", f"Enter equipment ID for {team1_entries[i].get()}:", minvalue=1)
+                            udp_handler_instance.transmit_equipment_id(equipment_id)
                 except ValueError:
                     print(f"Invalid ID entered for Team 1, index {i}")
 
@@ -90,8 +97,14 @@ def build(root: tk.Tk) -> None:
                     if player2_codename:
                         team2_entries[i].delete(0, tk.END)
                         team2_entries[i].insert(0, player2_codename)
+
+                        equipment_id = simpledialog.askinteger("Equipment ID", f"Enter equipment ID for {team1_entries[i].get()}:", minvalue=1)
+                        udp_handler_instance.transmit_equipment_id(equipment_id)
                     else:
                         if team2_entries[i].get():  # Ensure there's something to add
                             add_player(team2_entries[i].get(), int(team2_id_value))
+
+                            equipment_id = simpledialog.askinteger("Equipment ID", f"Enter equipment ID for {team1_entries[i].get()}:", minvalue=1)
+                            udp_handler_instance.transmit_equipment_id(equipment_id)
                 except ValueError:
                     print(f"Invalid ID entered for Team 2, index {i}")
