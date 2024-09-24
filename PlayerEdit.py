@@ -7,7 +7,7 @@ import tkinter.simpledialog as simpledialog
 def build(root: tk.Tk) -> None:
     udp_handler_instance = udp_handler.get_instance()
     root.title("Edit Player Screen")
-    root.geometry("850x700")
+    root.geometry("1200x700")
 
     main_frame = tk.Frame(root)
     main_frame.pack(pady=10, padx=10)
@@ -22,6 +22,7 @@ def build(root: tk.Tk) -> None:
 
     team1_entries = []
     team1_ids = []
+    team1_equipment_ids = []
 
     #Team2
     team2_frame = tk.LabelFrame(main_frame, text="Green Team", font=("Arial", 12), labelanchor="n", fg="green")
@@ -29,11 +30,12 @@ def build(root: tk.Tk) -> None:
 
     team2_entries = []
     team2_ids = []
+    team2_equipment_ids = []
 
     #Adding entries
     for i in range(20):
 
-        #Team1
+        # Team 1
         team1_id_label = tk.Label(team1_frame, text="ID", font=("Arial", 10))
         team1_id_label.grid(row=i, column=0, sticky="w", padx=5)
 
@@ -48,7 +50,14 @@ def build(root: tk.Tk) -> None:
         team1_entry.grid(row=i, column=3, padx=5, pady=2, sticky="w")
         team1_entries.append(team1_entry)
 
-        #Team2
+        team1_equipment_label = tk.Label(team1_frame, text="Equipment ID", font=("Arial", 10))
+        team1_equipment_label.grid(row=i, column=4, sticky="w", padx=5)
+
+        team1_equipment = ttk.Entry(team1_frame, width=6)
+        team1_equipment.grid(row=i, column=5, padx=5, pady=2, sticky="w")
+        team1_equipment_ids.append(team1_equipment)
+
+        # Team 2
         team2_id_label = tk.Label(team2_frame, text="ID", font=("Arial", 10))
         team2_id_label.grid(row=i, column=0, sticky="w", padx=5)
 
@@ -62,6 +71,14 @@ def build(root: tk.Tk) -> None:
         team2_entry = ttk.Entry(team2_frame, width=15)
         team2_entry.grid(row=i, column=3, padx=5, pady=2, sticky="w")
         team2_entries.append(team2_entry)
+
+        team2_equipment_label = tk.Label(team2_frame, text="Equipment ID", font=("Arial", 10))
+        team2_equipment_label.grid(row=i, column=4, sticky="w", padx=5)
+
+        team2_equipment = ttk.Entry(team2_frame, width=6)
+        team2_equipment.grid(row=i, column=5, padx=5, pady=2, sticky="w")
+        team2_equipment_ids.append(team2_equipment)
+
 
 
     def check_all_players():
