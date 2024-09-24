@@ -28,6 +28,6 @@ def splash_screen():
 
     root.bind('<Configure>', resize_image)
 
-    root.after(5000, hide_image, label)
+    root.after(3000, hide_image, label)
     root.mainloop()
 splash_screen()
