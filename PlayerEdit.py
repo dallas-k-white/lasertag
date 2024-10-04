@@ -80,6 +80,12 @@ def build(root: tk.Tk) -> None:
         team2_equipment_ids.append(team2_equipment)
 
 
+    def clear_entries_f12():
+        return
+    
+    def switch_to_play_action():
+        return
+
 
     def check_all_players():
         for i in range(20):
