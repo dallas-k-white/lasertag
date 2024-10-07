@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+import udp_handler
 from Database import find_player, add_player
-import udp_handler 
 import tkinter.simpledialog as simpledialog
 
 def build(root: tk.Tk) -> None:
