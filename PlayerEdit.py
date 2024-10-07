@@ -80,6 +80,12 @@ def build(root: tk.Tk) -> None:
         team2_equipment_ids.append(team2_equipment)
 
 
+    def clear_entries_f12():
+        return
+    
+    def switch_to_play_action():
+        return
+
 
     def check_all_players():
         for i in range(20):
@@ -109,7 +115,6 @@ def build(root: tk.Tk) -> None:
             team2_id_value = team2_ids[i].get()
             if team2_id_value:  # Ensure there is an ID to check
                 try:
-                    udp_handler_instance.transmit_equipment_id(int(team2_id_value))
                     player2_codename = find_player(int(team2_id_value))
                     if player2_codename:
                         team2_entries[i].delete(0, tk.END)
