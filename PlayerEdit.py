@@ -81,7 +81,14 @@ def build(root: tk.Tk) -> None:
 
 
     def clear_entries_f12():
-        return
+        for i in range(20):
+            team1_ids[i].delete("0", "end")
+            team1_entries[i].delete("0", "end")
+            team1_equipment_ids = 0
+
+            team2_ids[i].delete("0", "end")
+            team2_entries[i].delete("0", "end")
+            team2_equipment_ids = 0
     
     def switch_to_play_action():
         return
@@ -130,3 +137,5 @@ def build(root: tk.Tk) -> None:
                             udp_handler_instance.transmit_equipment_id(equipment_id)
                 except ValueError:
                     print(f"Invalid ID entered for Team 2, index {i}")
+
+    root.bind('<F12>', lambda event: clear_entries_f12())
