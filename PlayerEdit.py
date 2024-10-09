@@ -15,6 +15,10 @@ def build(root: tk.Tk) -> None:
     #Buttons
     check_players_button = ttk.Button(main_frame, text="Check All Players", command=lambda: check_all_players())
     check_players_button.grid(row=0, column=1, pady=5)
+    f12_clear_button = tk.Button(main_frame, text="F12\n Clear Entries", height = 3, command=lambda: clear_entries_f12())
+    f12_clear_button.grid(row = 1, column=1, pady=100, sticky="n")
+    f5_start_game = tk.Button(main_frame, text="F5\n Start Game", height = 3, command=lambda: switch_to_play_action())
+    f5_start_game.grid(row = 1, column=1, pady=100, sticky="s")
 
     #Team1
     team1_frame = tk.LabelFrame(main_frame, text="Red Team", font=("Arial", 12), labelanchor="n", fg="red")
