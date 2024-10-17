@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 import udp_handler
+import PlayerAction
+from PIL import ImageTk, Image
 from Database import find_player, add_player
 import tkinter.simpledialog as simpledialog
 
@@ -95,7 +97,39 @@ def build(root: tk.Tk) -> None:
             team2_equipment_ids = 0
     
     def switch_to_play_action():
-        return
+        main_frame.destroy()
+
+        background_img = Image.open("background.tif")
+        background = ImageTk.PhotoImage(background_img)
+        background_label = tk.Label(root, image=background)
+        background_label.image = background
+        background_label.place(relwidth=1, relheight=1)
+
+
+        alert_img = Image.open("alert.tif")
+        alert = ImageTk.PhotoImage(alert_img)
+        alert_label = tk.Label(root, image=alert, bd=0, highlightthickness=0)
+        alert_label.image = alert
+        alert_label.place(relwidth=1)
+
+
+        def countdown(i):
+            if i >= 0:
+                second_imgs = Image.open(f"{i}.tif")
+                second = ImageTk.PhotoImage(second_imgs)
+
+                seconds_label = tk.Label(root, image=second)
+                seconds_label.image = second
+                seconds_label.place(relx=0.5, rely=0.55, anchor="center")
+
+                root.after(1000, lambda: (seconds_label.destroy(), countdown(i - 1)))
+            else:
+                root.after(1, alert_label.destroy(), background_label.destroy())
+                root.after(1, PlayerAction.build_player_action, root)
+        
+        root.after(1000, countdown, 30)
+
+        
 
 
     def check_all_players():
@@ -143,3 +177,4 @@ def build(root: tk.Tk) -> None:
                     print(f"Invalid ID entered for Team 2, index {i}")
 
     root.bind('<F12>', lambda event: clear_entries_f12())
+    root.bind('<F5>', lambda event: switch_to_play_action())
