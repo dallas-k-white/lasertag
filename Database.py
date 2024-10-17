@@ -89,6 +89,7 @@ def get_players():
         
         cursor.close()
         conn.close()
+        return players
 
     except Exception as error:
         print("Error:", error)

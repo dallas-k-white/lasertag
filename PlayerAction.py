@@ -59,6 +59,11 @@ def build_player_action(root: tk.Tk) -> None:
         # Split players based off of even or odd
         # if ID even add to green team?
         #if ID odd add to red team?
+        for p in players:
+            if p[0] % 2 == 0:
+                team1_players.append(p)
+            elif p[0] % 2 == 1:
+                team2_players.append(p)
 
         # Pt the players into their screen
         for player in team1_players:
@@ -68,7 +73,7 @@ def build_player_action(root: tk.Tk) -> None:
             team2_listbox.insert(tk.END, player)
 
     
-    # populate_players()
+    populate_players()
 
 if __name__ == "__main__":
     root = tk.Tk()
