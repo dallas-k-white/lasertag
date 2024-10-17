@@ -5,9 +5,43 @@ import PlayerAction
 from PIL import ImageTk, Image
 from Database import find_player, add_player
 import tkinter.simpledialog as simpledialog
+udp_handler_instance = udp_handler.get_instance()
+
+def check_player(codename_entry: tk.Entry, equipment_id_entry: tk.Entry, next_entry: tk.Entry):
+
+    def check_func(event):
+        equipment_id_entry.delete(0,tk.END)
+        codename_entry.delete(0,tk.END)
+        if(len(event.widget.get()) == 0):
+            equipment_id_entry.config(state="disabled");
+            codename_entry.config(state="disabled");
+            return;
+
+        codename = find_player(int(event.widget.get()))
+        if codename:  # If a player is found
+            codename_entry.config(state="enabled") 
+            codename_entry.insert(0, codename)  # Insert the found codename
+            codename_entry.config(state="disabled") 
+        else:
+            codename = simpledialog.askstring("Player Codename", "Please enter the player codename")
+            codename_entry.config(state="enabled") 
+            codename_entry.insert(0, str(codename))  # Insert the found codename
+        equipment_id = simpledialog.askinteger("Equipment ID", f"Enter equipment ID for {codename}:", minvalue=1)
+
+        if(equipment_id is None or codename is None):
+            equipment_id_entry.delete(0,tk.END)
+            codename_entry.delete(0,tk.END)
+            equipment_id_entry.config(state="disabled");
+            codename_entry.config(state="disabled");
+            return;
+
+        equipment_id_entry.config(state="enabled")
+        equipment_id_entry.insert(0,str(equipment_id));
+        udp_handler_instance.transmit_equipment_id(equipment_id);
+        next_entry.config(state="enabled") 
+    return check_func;
 
 def build(root: tk.Tk) -> None:
-    udp_handler_instance = udp_handler.get_instance()
     root.title("Edit Player Screen")
     root.geometry("1200x700")
 
@@ -15,15 +49,16 @@ def build(root: tk.Tk) -> None:
     main_frame.pack(pady=10, padx=10)
 
     #Buttons
-    check_players_button = ttk.Button(main_frame, text="Check All Players", command=lambda: check_all_players())
-    check_players_button.grid(row=0, column=1, pady=5)
     f12_clear_button = tk.Button(main_frame, text="F12\n Clear Entries", height = 3, command=lambda: clear_entries_f12())
     f12_clear_button.grid(row = 1, column=1, pady=100, sticky="n")
     f5_start_game = tk.Button(main_frame, text="F5\n Start Game", height = 3, command=lambda: switch_to_play_action())
     f5_start_game.grid(row = 1, column=1, pady=100, sticky="s")
 
+    entry_label = tk.Label(main_frame, text="use enter or tab to check ID's", font=("Arial", 12))
+    entry_label.grid(row=0,column=1,pady=5)
+    main_frame.pack(padx=10,pady=10)
     #Team1
-    team1_frame = tk.LabelFrame(main_frame, text="Red Team", font=("Arial", 12), labelanchor="n", fg="red")
+    team1_frame = tk.LabelFrame(main_frame, text="Red Team", font=("Arial", 12), fg="red")
     team1_frame.grid(row=1, column=0, padx=10, pady=2, sticky="n")
 
     team1_entries = []
@@ -38,30 +73,38 @@ def build(root: tk.Tk) -> None:
     team2_ids = []
     team2_equipment_ids = []
 
+    team1_next = None
+    team2_next = None
     #Adding entries
-    for i in range(20):
+    for i in reversed(range(20)):
 
         # Team 1
-        team1_id_label = tk.Label(team1_frame, text="ID", font=("Arial", 10))
+        team1_id_label = tk.LabelFrame(team1_frame, text="ID", font=("Arial", 10))
         team1_id_label.grid(row=i, column=0, sticky="w", padx=5)
 
-        team1_id = ttk.Entry(team1_frame, width=4)
-        team1_id.grid(row=i, column=1, padx=5, pady=2, sticky="w")
-        team1_ids.append(team1_id)
 
         team1_player_label = tk.Label(team1_frame, text="Codename", font=("Arial", 10))
         team1_player_label.grid(row=i, column=2, sticky="w", padx=5)
 
-        team1_entry = ttk.Entry(team1_frame, width=15)
+        team1_entry = ttk.Entry(team1_frame, width=15, state="disabled")
         team1_entry.grid(row=i, column=3, padx=5, pady=2, sticky="w")
         team1_entries.append(team1_entry)
 
         team1_equipment_label = tk.Label(team1_frame, text="Equipment ID", font=("Arial", 10))
         team1_equipment_label.grid(row=i, column=4, sticky="w", padx=5)
 
-        team1_equipment = ttk.Entry(team1_frame, width=6)
+        team1_equipment = ttk.Entry(team1_frame, width=6, state="disabled")
         team1_equipment.grid(row=i, column=5, padx=5, pady=2, sticky="w")
         team1_equipment_ids.append(team1_equipment)
+
+        team1_id = ttk.Entry(team1_frame, width=4)
+        team1_id.bind("<Return>",check_player(team1_entry,team1_equipment,team1_next));
+        team1_id.bind("<Tab>",check_player(team1_entry,team1_equipment,team1_next));
+        team1_id.grid(row=i, column=1, padx=5, pady=2, sticky="w")
+        team1_ids.append(team1_id)
+        if(i != 0):
+            team1_id.config(state="disabled")
+        team1_next = team1_id;
 
         # Team 2
         team2_id_label = tk.Label(team2_frame, text="ID", font=("Arial", 10))
@@ -74,16 +117,20 @@ def build(root: tk.Tk) -> None:
         team2_player_label = tk.Label(team2_frame, text="Codename", font=("Arial", 10))
         team2_player_label.grid(row=i, column=2, sticky="w", padx=5)
 
-        team2_entry = ttk.Entry(team2_frame, width=15)
+        team2_entry = ttk.Entry(team2_frame, width=15,state="disabled")
         team2_entry.grid(row=i, column=3, padx=5, pady=2, sticky="w")
         team2_entries.append(team2_entry)
 
         team2_equipment_label = tk.Label(team2_frame, text="Equipment ID", font=("Arial", 10))
         team2_equipment_label.grid(row=i, column=4, sticky="w", padx=5)
 
-        team2_equipment = ttk.Entry(team2_frame, width=6)
+        team2_equipment = ttk.Entry(team2_frame, width=6, state="disabled")
         team2_equipment.grid(row=i, column=5, padx=5, pady=2, sticky="w")
         team2_equipment_ids.append(team2_equipment)
+        team2_id.bind("<Return>",check_player(team2_entry,team2_equipment,team2_next));
+        team2_id.bind("<Tab>",check_player(team2_entry,team2_equipment,team2_next));
+        if(i != 0):
+            team2_id.config(state="disabled")
 
 
     def clear_entries_f12():
