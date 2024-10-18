@@ -38,7 +38,8 @@ def check_player(codename_entry: tk.Entry, equipment_id_entry: tk.Entry, next_en
         equipment_id_entry.config(state="enabled")
         equipment_id_entry.insert(0,str(equipment_id));
         udp_handler_instance.transmit_equipment_id(equipment_id);
-        next_entry.config(state="enabled") 
+        if(next_entry is not None):
+            next_entry.config(state="enabled") 
     return check_func;
 
 def build(root: tk.Tk) -> None:
@@ -131,6 +132,7 @@ def build(root: tk.Tk) -> None:
         team2_id.bind("<Tab>",check_player(team2_entry,team2_equipment,team2_next));
         if(i != 0):
             team2_id.config(state="disabled")
+        team2_next = team2_id;
 
 
     def clear_entries_f12():
@@ -146,14 +148,14 @@ def build(root: tk.Tk) -> None:
     def switch_to_play_action():
         main_frame.destroy()
 
-        background_img = Image.open("background.tif")
+        background_img = Image.open("images/background.tif")
         background = ImageTk.PhotoImage(background_img)
         background_label = tk.Label(root, image=background)
         background_label.image = background
         background_label.place(relwidth=1, relheight=1)
 
 
-        alert_img = Image.open("alert.tif")
+        alert_img = Image.open("images/alert.tif")
         alert = ImageTk.PhotoImage(alert_img)
         alert_label = tk.Label(root, image=alert, bd=0, highlightthickness=0)
         alert_label.image = alert
@@ -162,7 +164,7 @@ def build(root: tk.Tk) -> None:
 
         def countdown(i):
             if i >= 0:
-                second_imgs = Image.open(f"{i}.tif")
+                second_imgs = Image.open(f"images/{i}.tif")
                 second = ImageTk.PhotoImage(second_imgs)
 
                 seconds_label = tk.Label(root, image=second)

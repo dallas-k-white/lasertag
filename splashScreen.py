@@ -22,7 +22,7 @@ def build(root: tk.Tk):
     root.geometry("600x600")
 
 
-    img = Image.open("logo.jpg")
+    img = Image.open("images/logo.jpg")
     logo = ImageTk.PhotoImage(img)
     label = tk.Label(root, image=logo)
     label.pack(fill=tk.BOTH, expand=tk.YES)
