@@ -52,31 +52,6 @@ def get_player_action(team1_entered_players, team2_entered_players):
     return build_player_action
 
 
-    def populate_players():
-        # Need to get working
-        players = get_players()  # Get all players
-        team1_players = []
-        team2_players = []
-
-        # Split players based off of even or odd
-        # if ID even add to green team?
-        #if ID odd add to red team?
-        for p in players:
-            if p[0] % 2 == 0:
-                team1_players.append(p)
-            elif p[0] % 2 == 1:
-                team2_players.append(p)
-
-        # Pt the players into their screen
-        for player in team1_players:
-            team1_listbox.insert(tk.END, player)
-
-        for player in team2_players:
-            team2_listbox.insert(tk.END, player)
-
-    
-    populate_players()
-
 if __name__ == "__main__":
     root = tk.Tk()
     get_player_action([(1,"player 1",1),(2,"player 2",2)],[(3,"player 3",3),(4,"player 4",4)])(root)
