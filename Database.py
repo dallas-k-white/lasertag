@@ -89,7 +89,6 @@ def get_players():
         
         cursor.close()
         conn.close()
-        return players
 
     except Exception as error:
         print("Error:", error)
@@ -133,4 +132,3 @@ def clear_table():
 #     add_player("Harold", 20)
 # else: 
 #     print("Player already exists with that ID, Name: ", nado me2)
-
