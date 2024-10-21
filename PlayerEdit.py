@@ -29,8 +29,8 @@ def check_player(codename_entry: tk.Entry, equipment_id_entry: tk.Entry, next_en
                 return
             codename_entry.config(state="enabled") 
             codename_entry.insert(0, str(codename))  # Insert the found codename
-        equipment_id = simpledialog.askinteger("Equipment ID", f"Enter equipment ID for {codename}:", minvalue=1)
 
+        equipment_id = simpledialog.askinteger("Equipment ID", f"Enter equipment ID for {codename}:", minvalue=1)
         if(equipment_id is None or codename is None):
             equipment_id_entry.delete(0,tk.END)
             codename_entry.delete(0,tk.END)
@@ -219,7 +219,6 @@ def build(root: tk.Tk) -> None:
                     if len(equipment_id) == 0:
                         simpledialog.messagebox.showerror("invalid equipment id",f"invalid Equipment ID for {team1_id_value}");
                         return None 
-                    udp_handler_instance.transmit_equipment_id(equipment_id) 
                     team1_players.append((team1_id_value,player1_codename,equipment_id))
                 except ValueError:
                     return None
@@ -242,7 +241,6 @@ def build(root: tk.Tk) -> None:
                     if len(equipment_id) == 0:
                         simpledialog.messagebox.showerror("invalid equipment id",f"invalid Equipment ID for {team2_id_value}");
                         return None 
-                        udp_handler_instance.transmit_equipment_id(equipment_id) 
                     team2_players.append((team2_id_value,player2_codename,equipment_id))
                 except ValueError:
                     return None                
