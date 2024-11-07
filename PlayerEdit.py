@@ -2,10 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 import udp_handler
 import PlayerAction
+import pygame
 from PIL import ImageTk, Image
 from Database import find_player, add_player
+from Music import play_track
 import tkinter.simpledialog as simpledialog
 udp_handler_instance = udp_handler.get_instance()
+pygame.mixer.init()
 
 def check_player(codename_entry: tk.Entry, equipment_id_entry: tk.Entry, next_entry: tk.Entry):
 
@@ -15,7 +18,7 @@ def check_player(codename_entry: tk.Entry, equipment_id_entry: tk.Entry, next_en
         if(len(event.widget.get()) == 0):
             equipment_id_entry.config(state="disabled");
             codename_entry.config(state="disabled");
-            return;
+            return
 
         codename = find_player(int(event.widget.get()))
         if codename:  # If a player is found
@@ -36,7 +39,7 @@ def check_player(codename_entry: tk.Entry, equipment_id_entry: tk.Entry, next_en
             codename_entry.delete(0,tk.END)
             equipment_id_entry.config(state="disabled");
             codename_entry.config(state="disabled");
-            return;
+            return
 
         equipment_id_entry.config(state="enabled")
         equipment_id_entry.insert(0,str(equipment_id));
@@ -44,7 +47,7 @@ def check_player(codename_entry: tk.Entry, equipment_id_entry: tk.Entry, next_en
         if(next_entry is not None):
             next_entry.config(state="enabled") 
             next_entry.focus()
-    return check_func;
+    return check_func
 
 def build(root: tk.Tk) -> None:
     root.title("Edit Player Screen")
@@ -107,7 +110,7 @@ def build(root: tk.Tk) -> None:
         team1_ids.append(team1_id)
         if(i != 0):
             team1_id.config(state="disabled")
-        team1_next = team1_id;
+        team1_next = team1_id
 
         # Team 2
         team2_id_label = tk.Label(team2_frame, text="ID", font=("Arial", 10))
@@ -134,7 +137,7 @@ def build(root: tk.Tk) -> None:
         team2_id.bind("<Tab>",check_player(team2_entry,team2_equipment,team2_next));
         if(i != 0):
             team2_id.config(state="disabled")
-        team2_next = team2_id;
+        team2_next = team2_id
 
 
     def clear_entries_f12():
@@ -186,6 +189,8 @@ def build(root: tk.Tk) -> None:
                 seconds_label = tk.Label(root, image=second)
                 seconds_label.image = second
                 seconds_label.place(relx=0.5, rely=0.55, anchor="center")
+                if i == 15:
+                    play_track()
 
                 root.after(1000, lambda: (seconds_label.destroy(), countdown(i - 1)))
             else:
