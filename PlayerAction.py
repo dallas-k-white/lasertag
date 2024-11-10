@@ -80,10 +80,10 @@ def get_player_action(team1_entered_players, team2_entered_players):
         log_listbox.grid(row=1, column=0, padx=10, pady=10)
 
         # Timer Display
-        timer_label = tk.Label(root, text="01:00", font=("Arial", 14), fg="black")
+        timer_label = tk.Label(root, text="06:00", font=("Arial", 14), fg="black")
         timer_label.place(relx=0.95, rely=0.95, anchor='se')
 
-        remaining_time = 1 * 60
+        remaining_time = 6 * 60
 
         return_button_frame = tk.Frame(root)
         update_timer(timer_label, remaining_time, disable_ui, return_button_frame, root)
