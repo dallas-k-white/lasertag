@@ -5,31 +5,33 @@ import PlayerEdit
 import udp_handler 
 
 
-def update_timer(label, remaining_time, disable_ui_func, return_button_frame):
+def update_timer(label, remaining_time, disable_ui_func, return_button_frame, root):
     minutes, seconds = divmod(remaining_time, 60)
     time_str = f"{minutes:02}:{seconds:02}"
     label.config(text=time_str)
 
     if remaining_time <= 0:
         label.config(text="00:00")
-        disable_ui_func()
-        show_return_button(return_button_frame)
+        disable_ui_func(root)
+        show_return_button(return_button_frame, root)
     else:
-        label.after(1000, update_timer, label, remaining_time - 1, disable_ui_func, return_button_frame)
+        label.after(1000, update_timer, label, remaining_time - 1, disable_ui_func, return_button_frame, root)
 
 def disable_ui(root):
     for widget in root.winfo_children():
-        widget.config(state=tk.DISABLED)
+
+        if isinstance(widget, (tk.Button, tk.Entry, tk.Listbox)):
+            widget.config(state=tk.DISABLED)
 
 def show_return_button(return_button_frame, root):
-    return_button = tk.Button(return_button_frame, text="Return to Player Edit Screen", font=("Arial", 14), command=go_to_player_edit_screen)
+    return_button = tk.Button(return_button_frame, text="Return to Player Edit Screen", font=("Arial", 14), command=lambda: go_to_player_edit_screen(root))
     return_button.pack(pady=10)
 
-def go_to_player_edit_screen():
-    global main_frame
+def go_to_player_edit_screen(root):
 
-    main_frame.pack_forget()
-
+    for widget in root.winfo_children():
+        widget.destroy()
+        
     PlayerEdit.build(root)
 
 def get_player_action(team1_entered_players, team2_entered_players):
@@ -78,15 +80,15 @@ def get_player_action(team1_entered_players, team2_entered_players):
         log_listbox.grid(row=1, column=0, padx=10, pady=10)
 
         # Timer Display
-        timer_label = tk.Label(root, text="06:00", font=("Arial", 14), fg="black")
+        timer_label = tk.Label(root, text="01:00", font=("Arial", 14), fg="black")
         timer_label.place(relx=0.95, rely=0.95, anchor='se')
 
-        remaining_time = 6 * 60
+        remaining_time = 1 * 60
 
         return_button_frame = tk.Frame(root)
-        update_timer(timer_label, remaining_time, disable_ui, return_button_frame)
+        update_timer(timer_label, remaining_time, disable_ui, return_button_frame, root)
 
-        return_button_frame.place(relx=0.95, rely=0.90, anchor='se')
+        return_button_frame.place(relx=0.5, rely=0.90, anchor='center')
 
         #play_track()
 
@@ -110,5 +112,5 @@ def get_player_action(team1_entered_players, team2_entered_players):
 if __name__ == "__main__":
     root = tk.Tk()
     get_player_action([(1,"player 1",1),(2,"player 2",2)],[(3,"player 3",3),(4,"player 4",4)])(root)
-    play_track()
+    #play_track()
     root.mainloop()
