@@ -86,7 +86,7 @@ def build(root: tk.Tk) -> None:
     for i in reversed(range(20)):
 
         # Team 1
-        team1_id_label = tk.LabelFrame(team1_frame, text="ID", font=("Arial", 10))
+        team1_id_label = tk.Label(team1_frame, text="ID", font=("Arial", 10))
         team1_id_label.grid(row=i, column=0, sticky="w", padx=5)
 
 
