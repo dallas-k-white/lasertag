@@ -98,19 +98,8 @@ def get_player_action(team1_entered_players, team2_entered_players):
     
     return build_player_action
 
-#def play_track():
-    #tracks = ["Tracks/Track01.mp3", "Tracks/Track02.mp3", "Tracks/Track03.mp3", "Tracks/Track04.mp3", "Tracks/Track05.mp3",
-    #        "Tracks/Track06.mp3", "Tracks/Track07.mp3", "Tracks/Track08.mp3"]
-    #t = random.choice(tracks)
-    #pygame.mixer.music.load(t)
-    #print(t)
-    #pygame.mixer.music.play(loops=0)
-
-
-
 
 if __name__ == "__main__":
     root = tk.Tk()
     get_player_action([(1,"player 1",1),(2,"player 2",2)],[(3,"player 3",3),(4,"player 4",4)])(root)
-    #play_track()
     root.mainloop()
