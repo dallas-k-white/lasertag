@@ -48,6 +48,23 @@ def get_player_action(team1_entered_players, team2_entered_players):
         # For testing purposes
         action_frame = tk.Frame(main_frame)
         action_frame.grid(row=1, column=1, padx=10)
+
+
+        def update_player_status():
+                # adds the B to player
+                alerts = udp_handler_instance.pop_alerts()
+                for player_hitting, player_hit in alerts:
+                    # locate the guy who hit base
+                    for team_listbox, players in [(team1_listbox, team1_entered_players), (team2_listbox, team2_entered_players)]:
+                        for index, player in enumerate(players):
+                            if player[0] == player_hitting:
+                                current_name = team_listbox.get(index)
+                                if " (B)" not in current_name:
+                                    team_listbox.delete(index)
+                                    team_listbox.insert(index, f"{current_name} (B)")
+                                    log_listbox.insert(tk.END, f"Player {current_name} hit base!")
+                                break
+
     
     return build_player_action
 
