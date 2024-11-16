@@ -13,6 +13,7 @@ def update_timer(label, remaining_time, disable_ui_func, return_button_frame, ro
     if remaining_time <= 0:
         label.config(text="00:00")
         disable_ui_func(root)
+        show_game_over(root)
         show_return_button(return_button_frame, root)
     else:
         label.after(1000, update_timer, label, remaining_time - 1, disable_ui_func, return_button_frame, root)
@@ -24,6 +25,7 @@ def disable_ui(root):
             widget.config(state=tk.DISABLED)
 
 def show_return_button(return_button_frame, root):
+
     return_button = tk.Button(return_button_frame, text="Return to Player Edit Screen", font=("Arial", 14), command=lambda: go_to_player_edit_screen(root))
     return_button.pack(pady=10)
 
@@ -33,6 +35,14 @@ def go_to_player_edit_screen(root):
         widget.destroy()
         
     PlayerEdit.build(root)
+
+def show_game_over(root):
+    for widget in root.winfo_children():
+        if widget.winfo_class() == 'Label' and widget.cget('text') == 'Game Over!':
+            return
+    
+    game_over_label = tk.Label(root, text="Game Over!", font=("Arial", 30), fg="red", bg="black")
+    game_over_label.place(relx=0.5, rely=0.6, anchor="center")
 
 def get_player_action(team1_entered_players, team2_entered_players):
 
