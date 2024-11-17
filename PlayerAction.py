@@ -46,9 +46,54 @@ def show_game_over(root):
 
 def get_player_action(team1_entered_players, team2_entered_players):
 
+    player_mapping = {}
+    team1_scores = {}
+    team2_scores = {}
+    for player_id, codename, equipment_id in team1_entered_players:
+        team1_scores[equipment_id] = {"base": False, "score": 0, "codename": codename}        
+        player_mapping[equipment_id] = team1_scores
+
+    for player_id, codename, equipment_id in team2_entered_players:
+        team2_scores[equipment_id] = {"base": False, "score": 0, "codename": codename}        
+        player_mapping[equipment_id] = team2_scores
+
+    udp_handler_instance = udp_handler.get_instance()
+
+    def update_player_scores(root: tk.Tk, team1_listbox: tk.Listbox, team2_listbox: tk.Listbox) -> None:
+        for hitting_player, hit_player in udp_handler_instance.pop_alerts():
+            if hit_player == 53:
+                player_mapping[hitting_player][hitting_player]["score"] += 100
+                player_mapping[hitting_player][hitting_player]["base"] = True
+            elif hit_player == 43:
+                player_mapping[hitting_player][hitting_player]["score"] += 100
+                player_mapping[hitting_player][hitting_player]["base"] = True
+            elif player_mapping[hit_player] == player_mapping[hitting_player]:
+                player_mapping[hitting_player][hitting_player]["score"] -= 10
+            else:
+                player_mapping[hitting_player][hitting_player]["score"] += 10
+        
+        team1_values = list(team1_scores.values())
+        team2_values = list(team2_scores.values())
+        team1_values.sort(key=lambda s: s["score"])
+        team2_values.sort(key=lambda s: s["score"])
+        team1_listbox.delete(0,'end')
+        team2_listbox.delete(0,'end')
+        for value in team1_values:
+            display_text = value["codename"]
+            if value["base"]:
+                display_text += "[B]"
+            display_text += " " + str(value["score"]);
+            team1_listbox.insert(0,display_text)
+        for value in team2_values:
+            display_text = value["codename"]
+            if value["base"]:
+                display_text += "[B]"
+            display_text += " " + str(value["score"]);
+            team2_listbox.insert(0,display_text)
+        root.after(100,update_player_scores,root,team1_listbox,team2_listbox)
+
     def build_player_action(root: tk.Tk) -> None:
 
-        udp_handler_instance = udp_handler.get_instance()
         root.title("Player Action")
         root.geometry("1200x700")
 
@@ -65,7 +110,7 @@ def get_player_action(team1_entered_players, team2_entered_players):
 
         team1_players = [p[1] for p in team1_entered_players]
 
-        team1_listbox = tk.Listbox(team1_frame, selectmode=tk.SINGLE, height=10, exportselection=0)
+        team1_listbox = tk.Listbox(team1_frame, selectmode=tk.SINGLE, font=("",12), height=10, exportselection=0)
         team1_listbox.grid(row=1, column=0, padx=10, pady=5)
         for player in team1_players:
             team1_listbox.insert(tk.END, player)
@@ -77,7 +122,7 @@ def get_player_action(team1_entered_players, team2_entered_players):
         team2_players = [p[1] for p in team2_entered_players]
 
 
-        team2_listbox = tk.Listbox(team2_frame, selectmode=tk.SINGLE, height=10, exportselection=0)
+        team2_listbox = tk.Listbox(team2_frame, selectmode=tk.SINGLE, height=10, font=("",12), exportselection=0)
         team2_listbox.grid(row=1, column=0, padx=10, pady=5)
         for player in team2_players:
             team2_listbox.insert(tk.END, player)
@@ -105,11 +150,13 @@ def get_player_action(team1_entered_players, team2_entered_players):
         # For testing purposes
         action_frame = tk.Frame(main_frame)
         action_frame.grid(row=1, column=1, padx=10)
-    
+        root.after(0,update_player_scores,root,team1_listbox,team2_listbox)
     return build_player_action
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     get_player_action([(1,"player 1",1),(2,"player 2",2)],[(3,"player 3",3),(4,"player 4",4)])(root)
+    udp_handler_instance = udp_handler.get_instance()
+    udp_handler_instance.transmit_start()
     root.mainloop()
