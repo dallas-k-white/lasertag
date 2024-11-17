@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import udp_handler
 import PlayerAction
+import sys
 import pygame
 from PIL import ImageTk, Image
 from Database import find_player, add_player
@@ -199,7 +200,9 @@ def build(root: tk.Tk) -> None:
         
         root.after(1000, countdown, 30)
 
-        
+    def close_window():
+        udp_handler.get_instance().shutdown()
+        root.destroy()
 
 
     def check_all_players():
@@ -252,4 +255,5 @@ def build(root: tk.Tk) -> None:
         return (team1_players,team2_players)            
             
     root.bind('<F12>', lambda event: clear_entries_f12())
+    root.protocol("WM_DELETE_WINDOW",close_window)
     root.bind('<F5>', lambda event: switch_to_play_action())
