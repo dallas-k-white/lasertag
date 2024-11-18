@@ -227,7 +227,7 @@ def build(root: tk.Tk) -> None:
                     if len(equipment_id) == 0:
                         simpledialog.messagebox.showerror("invalid equipment id",f"invalid Equipment ID for {team1_id_value}");
                         return None 
-                    team1_players.append((team1_id_value,player1_codename,equipment_id))
+                    team1_players.append((int(team1_id_value),player1_codename,int(equipment_id)))
                 except ValueError:
                     return None
 
@@ -249,7 +249,7 @@ def build(root: tk.Tk) -> None:
                     if len(equipment_id) == 0:
                         simpledialog.messagebox.showerror("invalid equipment id",f"invalid Equipment ID for {team2_id_value}");
                         return None 
-                    team2_players.append((team2_id_value,player2_codename,equipment_id))
+                    team2_players.append((int(team2_id_value),player2_codename,int(equipment_id)))
                 except ValueError:
                     return None                
         return (team1_players,team2_players)            

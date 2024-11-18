@@ -59,17 +59,21 @@ def get_player_action(team1_entered_players, team2_entered_players):
 
     udp_handler_instance = udp_handler.get_instance()
 
-    def update_player_scores(root: tk.Tk, team1_listbox: tk.Listbox, team2_listbox: tk.Listbox) -> None:
+    def update_player_scores(root: tk.Tk, team1_listbox: tk.Listbox, team2_listbox: tk.Listbox, action_log: tk.Listbox) -> None:
         for hitting_player, hit_player in udp_handler_instance.pop_alerts():
             if hit_player == 53:
                 player_mapping[hitting_player][hitting_player]["score"] += 100
                 player_mapping[hitting_player][hitting_player]["base"] = True
+                action_log.insert(0,player_mapping[hitting_player][hitting_player]["codename"] + " hit the base")
             elif hit_player == 43:
+                action_log.insert(0,player_mapping[hitting_player][hitting_player]["codename"] + " hit the base")
                 player_mapping[hitting_player][hitting_player]["score"] += 100
                 player_mapping[hitting_player][hitting_player]["base"] = True
             elif player_mapping[hit_player] == player_mapping[hitting_player]:
+                action_log.insert(0,player_mapping[hitting_player][hitting_player]["codename"] + " hit " + player_mapping[hitting_player][hitting_player]["codename"])
                 player_mapping[hitting_player][hitting_player]["score"] -= 10
             else:
+                action_log.insert(0,player_mapping[hitting_player][hitting_player]["codename"] + " hit " + player_mapping[hitting_player][hitting_player]["codename"])
                 player_mapping[hitting_player][hitting_player]["score"] += 10
         
         team1_values = list(team1_scores.values())
@@ -90,7 +94,7 @@ def get_player_action(team1_entered_players, team2_entered_players):
                 display_text += "[B]"
             display_text += " " + str(value["score"]);
             team2_listbox.insert(0,display_text)
-        root.after(100,update_player_scores,root,team1_listbox,team2_listbox)
+        root.after(100,update_player_scores,root,team1_listbox,team2_listbox, action_log)
 
     def build_player_action(root: tk.Tk) -> None:
 
@@ -151,7 +155,7 @@ def get_player_action(team1_entered_players, team2_entered_players):
         # For testing purposes
         action_frame = tk.Frame(main_frame)
         action_frame.grid(row=1, column=1, padx=10)
-        root.after(0,update_player_scores,root,team1_listbox,team2_listbox)
+        root.after(0,update_player_scores,root,team1_listbox,team2_listbox, log_listbox)
     return build_player_action
 
 
