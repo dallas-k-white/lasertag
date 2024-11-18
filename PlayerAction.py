@@ -70,10 +70,10 @@ def get_player_action(team1_entered_players, team2_entered_players):
                 player_mapping[hitting_player][hitting_player]["score"] += 100
                 player_mapping[hitting_player][hitting_player]["base"] = True
             elif player_mapping[hit_player] == player_mapping[hitting_player]:
-                action_log.insert(0,player_mapping[hitting_player][hitting_player]["codename"] + " hit " + player_mapping[hitting_player][hitting_player]["codename"])
+                action_log.insert(0,player_mapping[hitting_player][hitting_player]["codename"] + " hit " + player_mapping[hit_player][hit_player]["codename"])
                 player_mapping[hitting_player][hitting_player]["score"] -= 10
             else:
-                action_log.insert(0,player_mapping[hitting_player][hitting_player]["codename"] + " hit " + player_mapping[hitting_player][hitting_player]["codename"])
+                action_log.insert(0,player_mapping[hitting_player][hitting_player]["codename"] + " hit " + player_mapping[hit_player][hit_player]["codename"])
                 player_mapping[hitting_player][hitting_player]["score"] += 10
         
         team1_values = list(team1_scores.values())
