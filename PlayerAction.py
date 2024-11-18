@@ -144,6 +144,7 @@ def get_player_action(team1_entered_players, team2_entered_players):
         update_timer(timer_label, remaining_time, disable_ui, return_button_frame, root)
 
         return_button_frame.place(relx=0.5, rely=0.90, anchor='center')
+        udp_handler_instance.transmit_start()
 
         #play_track()
 
@@ -157,6 +158,4 @@ def get_player_action(team1_entered_players, team2_entered_players):
 if __name__ == "__main__":
     root = tk.Tk()
     get_player_action([(1,"player 1",1),(2,"player 2",2)],[(3,"player 3",3),(4,"player 4",4)])(root)
-    udp_handler_instance = udp_handler.get_instance()
-    udp_handler_instance.transmit_start()
     root.mainloop()
