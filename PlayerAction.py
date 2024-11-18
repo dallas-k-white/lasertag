@@ -59,7 +59,7 @@ def get_player_action(team1_entered_players, team2_entered_players):
 
     udp_handler_instance = udp_handler.get_instance()
 
-    def update_player_scores(root: tk.Tk, team1_listbox: tk.Listbox, team2_listbox: tk.Listbox, action_log: tk.Listbox) -> None:
+    def update_player_scores(root: tk.Tk, team1_listbox: tk.Listbox, team2_listbox: tk.Listbox, action_log: tk.Listbox, team1_frame: tk.LabelFrame, team2_frame: tk.LabelFrame) -> None:
         for hitting_player, hit_player in udp_handler_instance.pop_alerts():
             if hit_player == 53:
                 player_mapping[hitting_player][hitting_player]["score"] += 100
@@ -82,19 +82,26 @@ def get_player_action(team1_entered_players, team2_entered_players):
         team2_values.sort(key=lambda s: s["score"])
         team1_listbox.delete(0,'end')
         team2_listbox.delete(0,'end')
+        team1_total_score = 0 
         for value in team1_values:
             display_text = value["codename"]
             if value["base"]:
                 display_text += "[B]"
+            team1_total_score += value["score"]
             display_text += " " + str(value["score"]);
             team1_listbox.insert(0,display_text)
+
+        team2_total_score = 0
         for value in team2_values:
             display_text = value["codename"]
             if value["base"]:
                 display_text += "[B]"
             display_text += " " + str(value["score"]);
+            team2_total_score += value["score"]
             team2_listbox.insert(0,display_text)
-        root.after(100,update_player_scores,root,team1_listbox,team2_listbox, action_log)
+        team1_frame.configure(text="Red Team - " + str(team1_total_score))
+        team2_frame.configure(text="Green Team - " + str(team2_total_score))
+        root.after(100,update_player_scores,root,team1_listbox,team2_listbox, action_log, team1_frame, team2_frame)
 
     def build_player_action(root: tk.Tk) -> None:
 
@@ -111,7 +118,6 @@ def get_player_action(team1_entered_players, team2_entered_players):
         # Red team
         team1_frame = tk.LabelFrame(main_frame, text="Red Team", font=("Arial", 12), labelanchor="n", fg="red")
         team1_frame.grid(row=1, column=0, padx=10, pady=2, sticky="n")
-
         team1_players = [p[1] for p in team1_entered_players]
 
         team1_listbox = tk.Listbox(team1_frame, selectmode=tk.SINGLE, font=("",12), height=10, exportselection=0)
@@ -155,7 +161,7 @@ def get_player_action(team1_entered_players, team2_entered_players):
         # For testing purposes
         action_frame = tk.Frame(main_frame)
         action_frame.grid(row=1, column=1, padx=10)
-        root.after(0,update_player_scores,root,team1_listbox,team2_listbox, log_listbox)
+        root.after(0,update_player_scores,root,team1_listbox,team2_listbox, log_listbox, team1_frame, team2_frame)
     return build_player_action
 
 
