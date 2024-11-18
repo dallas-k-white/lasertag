@@ -5,7 +5,7 @@ import PlayerEdit
 import udp_handler 
 
 
-def update_timer(label, remaining_time, disable_ui_func, return_button_frame, root):
+def update_timer(label, remaining_time, disable_ui_func, return_button_frame, udp, root):
     minutes, seconds = divmod(remaining_time, 60)
     time_str = f"{minutes:02}:{seconds:02}"
     label.config(text=time_str)
@@ -14,9 +14,10 @@ def update_timer(label, remaining_time, disable_ui_func, return_button_frame, ro
         label.config(text="00:00")
         disable_ui_func(root)
         show_game_over(root)
+        udp.transmit_end()
         show_return_button(return_button_frame, root)
     else:
-        label.after(1000, update_timer, label, remaining_time - 1, disable_ui_func, return_button_frame, root)
+        label.after(1000, update_timer, label, remaining_time - 1, disable_ui_func, return_button_frame, udp, root)
 
 def disable_ui(root):
     for widget in root.winfo_children():
@@ -151,12 +152,11 @@ def get_player_action(team1_entered_players, team2_entered_players):
         remaining_time = 6 * 60
 
         return_button_frame = tk.Frame(root)
-        update_timer(timer_label, remaining_time, disable_ui, return_button_frame, root)
+        update_timer(timer_label, remaining_time, disable_ui, return_button_frame, udp_handler_instance, root)
 
         return_button_frame.place(relx=0.5, rely=0.90, anchor='center')
         udp_handler_instance.transmit_start()
 
-        #play_track()
 
         # For testing purposes
         action_frame = tk.Frame(main_frame)
